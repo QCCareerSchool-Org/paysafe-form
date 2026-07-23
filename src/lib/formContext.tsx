@@ -3,7 +3,11 @@ import type { PaysafeInstance } from './paysafe';
 
 export interface Context {
   setupKey: string;
-  initialized: boolean;
+  initialized: {
+    card: boolean;
+    googlePay: boolean;
+    applePay: boolean;
+  };
   instance: PaysafeInstance | null;
 }
 

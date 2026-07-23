@@ -21,6 +21,9 @@ export interface PaysafeInstance {
   fields: (fields: UniqueSpaceSeparated<PaysafeFieldName>) => {
     on: (events: UniqueSpaceSeparated<PaysafeEventName>, callback: (this: HTMLElement, instance: PaysafeInstance, e: PaysafeEvent) => void) => void;
   };
+  threedsecure: {
+    start: (apiKey: string, options: unknown, callback: (err: Error, result: unknown) => void) => void;
+  };
 }
 
 interface Paysafe {

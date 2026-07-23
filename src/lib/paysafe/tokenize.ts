@@ -1,3 +1,4 @@
+/** https://developer.paysafe.com/en/api-docs/paysafe-js/tokenize/#c106801 */
 export interface TokenizeOptions {
   /**
    * The payment amount is in minor units to charge the customer's card. Use the correct minor units amount for the merchant account currency.
@@ -364,9 +365,9 @@ export interface TokenizeOptions {
    */
   openAs?: 'IFRAME' | 'NEW_TAB';
   /** Additional data for the Apple Pay payment method. Must be provided if paymentType = APPLEPAY */
-  applePay?: never;
+  applePay?: unknown;
   /** Additional data for the Google Pay payment method. Must be provided if paymentType = GOOGLEPAY */
-  googlePay?: never;
+  googlePay?: unknown;
   /** This is the singleUseCustomerToken that the merchant generated using the Create a Single-Use Customer Token request. */
   singleUseCustomerToken?: string;
   /** This is single-use payment handle associated with the customer. */

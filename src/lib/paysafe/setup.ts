@@ -1,6 +1,6 @@
 export type Environment = 'LIVE' | 'TEST';
 
-type Field = 'cardNumber' | 'cvv' | 'expiryDate'; // | 'expiryYear' | 'expiryMonth' | 'applePay' | 'googlePay';
+type Field = 'cardNumber' | 'cvv' | 'expiryDate' | 'expiryYear' | 'expiryMonth' | 'applePay' | 'googlePay';
 
 type Id = '#cvv' | '#card-number' | '#expiry-date' | '#expiry-year' | '#expiry-month';
 type Class = 'valid' | 'invalid';
@@ -8,7 +8,7 @@ type Property = 'color' | 'opacity' | 'letter-spacing' | 'text-align' | 'text-in
 
 export type Style = Partial<Record<Id | `${Id}.${Class}` | 'input' | ':focus' | '.invalid' | '.valid', Partial<Record<Property, string>>>>;
 
-export type Fields = Record<Field, {
+export type Fields = Partial<Record<Field, {
   /** CSS selector that uniquely identifies the empty container in which to insert the field iframe. */
   selector: string;
   /** Placeholder for the iframe input element. */
@@ -67,7 +67,7 @@ export type Fields = Record<Field, {
    * two-letter ISO 3166 country code array
    */
   supportedCountries?: string[];
-}>;
+}>>;
 
 export interface SetupOptions {
   /**

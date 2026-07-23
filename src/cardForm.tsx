@@ -17,7 +17,7 @@ interface Props {
   id: string;
 }
 
-export const InnerForm: FC<Props> = ({ id }) => {
+export const CardForm: FC<Props> = ({ id }) => {
   const { initialized, setupKey, instance } = useFormContext();
   const [ validity, setValidity ] = useState<Validity>({
     fields: {
@@ -72,7 +72,7 @@ export const InnerForm: FC<Props> = ({ id }) => {
           <div id={`expiryDate_${id}_${setupKey}`} className="form-control" style={{ height: 31 }} />
         </div>
       </div>
-      <button type="submit" disabled={!initialized || !validity.allValid} className="btn btn-primary">Click Me</button>
+      <button type="submit" disabled={!initialized.card || !validity.allValid} className="btn btn-primary">Click Me</button>
     </>
   );
 };
