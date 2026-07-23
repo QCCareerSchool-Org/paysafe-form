@@ -1,6 +1,6 @@
 import type { FC, PropsWithChildren, SubmitEventHandler } from 'react';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
-import type { PaysafeEvent, PaysafeInstance } from './paysafe';
+import type { PaysafeInstance } from './paysafe';
 import { getPaysafeWindow } from './paysafe';
 import type { SetupError, SetupOptions } from './paysafe/setup';
 import { isSetupError } from './paysafe/setup';
@@ -19,17 +19,7 @@ interface Props {
   onSetupError?: (err: SetupError) => void;
 }
 
-interface Validity {
-  fields: {
-    CardNumber: boolean;
-    Cvv: boolean;
-    ExpiryDate: boolean;
-  };
-  valid: boolean;
-}
-
 export const PaysafeForm: FC<PropsWithChildren<Props>> = memo(({ getSetupOptions, getTokenizationOptions, onTokenize, onSetupError, onTokenizeError, children, ...props }) => {
-  const [ validity, setValidity ] = useState<Validity>({ fields: { CardNumber: false, Cvv: false, ExpiryDate: false }, valid: false });
   const [ setupKey, setSetupKey ] = useState(0);
   const paysafe = useRef<PaysafeInstance>(null);
   const setupGeneration = useRef(0);
@@ -68,7 +58,6 @@ export const PaysafeForm: FC<PropsWithChildren<Props>> = memo(({ getSetupOptions
           throw cancelledSetup;
         }
         if (paymentMethods.card && !paymentMethods.card.error) {
-          paysafe.current?.fields('Cvv CardNumber ExpiryDate').on('Valid Invalid', handleFieldChange(setValidity, isCurrent));
           setInitialized(true);
         } else {
           if (!paymentMethods.card) {
@@ -102,7 +91,7 @@ export const PaysafeForm: FC<PropsWithChildren<Props>> = memo(({ getSetupOptions
   const handleSubmit: SubmitEventHandler = useCallback(e => {
     e.preventDefault();
 
-    if (!initialized || !validity.valid) {
+    if (!initialized) {
       return;
     }
 
@@ -114,7 +103,7 @@ export const PaysafeForm: FC<PropsWithChildren<Props>> = memo(({ getSetupOptions
         onTokenizeError?.(err);
       };
     });
-  }, [ getTokenizationOptions, initialized, validity.valid, onTokenize, onTokenizeError ]);
+  }, [ getTokenizationOptions, initialized, onTokenize, onTokenizeError ]);
 
   return (
     <FormContextProvider initialized={initialized} setupKey={setupKey.toString()} instance={paysafe.current}>
@@ -130,25 +119,3 @@ export const PaysafeForm: FC<PropsWithChildren<Props>> = memo(({ getSetupOptions
 PaysafeForm.displayName = 'PaysafeForm';
 
 const cancelledSetup = Symbol('cancelledSetup');
-
-const handleFieldChange = (setValidity: React.Dispatch<React.SetStateAction<Validity>>, isCurrent: () => boolean) => function (this: HTMLElement, _: PaysafeInstance, event: PaysafeEvent) {
-  if (!isCurrent()) {
-    return;
-  }
-
-  if (event.type === 'Invalid') {
-    this.classList.add('invalid');
-  } else {
-    this.classList.remove('invalid');
-  }
-  setValidity(v => {
-    const newFields = {
-      ...v.fields,
-      [event.target.fieldName]: event.type === 'Valid',
-    };
-    return {
-      fields: newFields,
-      valid: Object.values(newFields).every(Boolean),
-    };
-  });
-};

@@ -40,7 +40,9 @@ export const InnerForm: FC<Props> = ({ id }) => {
         return;
       }
 
-      this.classList.toggle('invalid', event.type === 'Invalid');
+      this.classList.toggle('is-invalid', event.type === 'Invalid');
+      this.classList.toggle('is-valid', event.type === 'Valid');
+
       setValidity(v => {
         const fields = {
           ...v.fields,
