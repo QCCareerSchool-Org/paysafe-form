@@ -1,7 +1,7 @@
 {
   "name": "paysafe-form",
   "description": "React lifecycle wrapper for Paysafe.js.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "main": "./dist/paysafe-form.cjs.js",
   "module": "./dist/paysafe-form.es.js",
